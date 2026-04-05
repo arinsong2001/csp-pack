@@ -12,3 +12,5 @@ target=~/.local/nvim-linux-$arch/bin/nvim
 
 sudo rm -f /usr/local/bin/nvim *.gz
 sudo ln -s "$target" /usr/local/bin/nvim
+
+. ~/.bash_profile
