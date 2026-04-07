@@ -17,14 +17,14 @@ vim.g.mapleader = " "
 
 local cmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 % && ./a.out; rm -f a.out)"
 
-vim.keymap.set("n", "<C-t>", ":bel ter<CR>i", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-]>", ":bel ter<CR>i", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>t", ":bel ter<CR>i", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>r", ":w<CR>:bel ter " .. cmd .. "<CR>i", { noremap = true, silent = true })
 
 if vim.g.vscode then
   local vscode = require("vscode")
 
-  vim.keymap.set("n", "<C-t>", function()
+  vim.keymap.set("n", "<C-]>", function()
     vscode.action("workbench.action.terminal.toggleTerminal")
   end, { noremap = true, silent = true })
 
