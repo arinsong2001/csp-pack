@@ -26,7 +26,9 @@ alias p='python3'
 c() (
   trap 'rm -f a.out' INT
   g++ -std=c++23 -O2 "$1" && ./a.out
+  ret=$?
   rm -f a.out
+  return $ret
 )
 
 # others
@@ -55,7 +57,3 @@ PS1='
 \[\e[1;33m\]\w\[\e[0m\] \
 [\t] \[\e[1;31m\]$exit_code\[\e[0m\]
 \[\e[1;31m\]$\[\e[0m\] '
-
-# proxy
-export http_proxy=socks5://127.0.0.1:1080
-export https_proxy=socks5://127.0.0.1:1080
