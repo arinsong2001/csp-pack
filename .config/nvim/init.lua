@@ -37,21 +37,17 @@ end, { noremap = true, silent = true })
 if vim.g.vscode then
   local vscode = require("vscode")
 
-  vim.defer_fn(function()
-    vim.cmd("se rnu")
-  end, 200)
-
   vim.keymap.set("n", "<leader>t", function()
     vscode.action("workbench.action.terminal.toggleTerminal")
   end, { noremap = true, silent = true })
 
   vim.keymap.set("n", "<leader>r", function()
+    local f = vim.fn.expand("%:p")
     local ft = vim.bo.filetype
-    local f= vim.fn.expand("%:p")
 
     local vcmd
     if ft == "cpp" then
-      vcmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 " .. f.. " && ./a.out; rm -f a.out)"
+      vcmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 " .. f .. " && ./a.out; rm -f a.out)"
     elseif ft == "python" then
       vcmd = "python3 " .. f
     else
@@ -62,7 +58,7 @@ if vim.g.vscode then
     vscode.action("workbench.action.terminal.focus")
 
     vim.defer_fn(function()
-      vscode.action("workbench.action.terminal.sendSequence", { args = { text = vcmd .. "\r"} })
+      vscode.action("workbench.action.terminal.sendSequence", { args = { text = vcmd .. "\r" } })
     end, 200)
   end, { noremap = true, silent = true })
 end
