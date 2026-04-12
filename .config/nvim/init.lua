@@ -17,19 +17,27 @@ vim.g.mapleader = " "
 
 local cmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 % && ./a.out; rm -f a.out)"
 
-vim.keymap.set("n", "<C-t>", ":bel ter<CR>i", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>t", ":bel ter<CR>i", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>r", ":w<CR>:bel ter " .. cmd .. "<CR>i", { noremap = true, silent = true })
 
 if vim.g.vscode then
   local vscode = require("vscode")
 
-  vim.keymap.set("n", "<C-t>", function()
+  vim.keymap.set("n", "<leader>t", function()
     vscode.action("workbench.action.terminal.toggleTerminal")
   end, { noremap = true, silent = true })
 
-  vim.keymap.set("n", "<leader>t", function()
-    vscode.action("workbench.action.terminal.toggleTerminal")
+  vim.keymap.set("n", "<leader>r", function()
+    local file = vim.fn.expand("%:p")
+    local vcmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 " .. file .. " && ./a.out; rm -f a.out)"
+
+    vscode.action("workbench.action.files.save")
+    vscode.action("workbench.action.terminal.focus")
+
+    vim.defer_fn(function()
+      vscode.action("workbench.action.terminal.sendSequence", { args = { text = vcmd .. "\r" } })
+    end, 200)
+
   end, { noremap = true, silent = true })
 end
 
