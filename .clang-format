@@ -1,11 +1,11 @@
 IndentWidth: 4
-
 ColumnLimit: 0
-
 SortIncludes: false
 
-AlignAfterOpenBracket: DontAlign
-
-AllowShortFunctionsOnASingleLine: None
+AlignAfterOpenBracket: false
 
 AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Empty
+
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true

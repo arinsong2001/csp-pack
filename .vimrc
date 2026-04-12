@@ -9,8 +9,17 @@ se clipboard=unnamed,unnamedplus
 
 let g:mapleader = " "
 
-let s:cmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 % && ./a.out; rm -f a.out)"
+let s:rc = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 % && ./a.out; rm -f a.out)"
+let s:rp = "python3 %"
 
-nn <C-t> :bel ter<CR>
 nn <leader>t :bel ter<CR>
-exe "nn <leader>r :w<CR>:!" . s:cmd . "<CR>"
+
+nn <leader>r :w<CR>:call RunFile()<CR>
+
+fun! RunFile()
+    if &ft == 'cpp'
+        exe "!" . s:rc
+    else
+        exe "!" . s:rp
+    en
+endf
