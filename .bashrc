@@ -4,6 +4,9 @@
 export EDITOR='vim'
 export VISUAL='nvim'
 
+export http_proxy=socks5://127.0.0.1:1080
+export https_proxy=socks5://127.0.0.1:1080
+
 # dir motion
 alias l='ls --color'
 alias la='l -a'
