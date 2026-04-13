@@ -59,7 +59,7 @@ if vim.g.vscode then
 
     vim.defer_fn(function()
       vscode.action("workbench.action.terminal.sendSequence", { args = { text = vcmd .. "\r" } })
-    end, 200)
+    end, 500)
   end, { noremap = true, silent = true })
 end
 
