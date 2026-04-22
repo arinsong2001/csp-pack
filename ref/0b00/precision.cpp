@@ -4,34 +4,41 @@ using namespace std;
 
 using ll = long long;
 
+void type(auto &&arg) {
+    cout << __PRETTY_FUNCTION__ << endl;
+}
+
+void show(const auto &r) {
+    ranges::for_each(r, [&](const auto &x) { cout << x << ' '; });
+    cout << endl;
+}
+
 vector<int> stov(const string &s) {
-    vector<int> res;
-    res.reserve(s.size());
-    for (int i = s.size() - 1; i >= 0; i--) {
-        res.push_back(s[i] - '0');
-    }
-    return res;
+    auto v = vector<int>{};
+    for (int i = s.size() - 1; i >= 0; i--)
+        v.push_back(s[i] - '0');
+    return v;
 }
 
 string vtos(const vector<int> &v) {
-    string res;
-    for (int i = v.size() - 1; i >= 0; i--) {
-        res += '0' + v[i];
-    }
-    return res;
+    auto s = string{};
+    for (int i = v.size() - 1; i >= 0; i--)
+        s += '0' + v[i];
+    return s;
 }
 
-vector<int> add(const vector<int> &x, const vector<int> &y) {
-    int tmp = 0;
-    vector<int> res;
-    int i = 0;
+void trim(vector<int> &v) {
+    while (v.size() > 1 && !v.back()) {
+        v.pop_back();
+    }
+}
+
+vector<int> pls(const vector<int> &x, const vector<int> &y) {
+    auto res = vector<int>{};
+    ll tmp = 0;
     for (int i = 0; i < x.size() || i < y.size(); i++) {
-        if (i < x.size()) {
-            tmp += x[i];
-        }
-        if (i < y.size()) {
-            tmp += y[i];
-        }
+        if (i < x.size()) tmp += x[i];
+        if (i < y.size()) tmp += y[i];
         res.push_back(tmp % 10);
         tmp /= 10;
     }
@@ -39,36 +46,38 @@ vector<int> add(const vector<int> &x, const vector<int> &y) {
         res.push_back(tmp % 10);
         tmp /= 10;
     }
+    trim(res);
     return res;
 }
 
-vector<int> sub(const vector<int> &x, const vector<int> &y) {
-    assert(x.size() > y.size() || x.size() == y.size() && x >= y);
-    int tmp = 0;
-    vector<int> res;
+vector<int> mns(const vector<int> &x, const vector<int> &y) {
+    auto ge = [&](const auto &x, const auto &y) {
+        if (x.size() != y.size())
+            return x.size() > y.size();
+        for (int i = x.size() - 1; i >= 0; i--)
+            if (x[i] != y[i]) return x[i] > y[i];
+        return true;
+    };
+    assert(ge(x, y));
+
+    auto res = vector<int>{};
+    ll tmp = 0;
     for (int i = 0; i < x.size(); i++) {
         tmp = x[i] - tmp;
-        if (i < y.size()) {
-            tmp -= y[i];
-        }
+        if (i < y.size()) tmp -= y[i];
         res.push_back((tmp + 10) % 10);
-        tmp = tmp < 0;
+        if (tmp < 0) tmp = 1;
+        else tmp = 0;
     }
-    while (res.size() > 1 && res.back() == 0) {
-        res.pop_back();
-    }
+    trim(res);
     return res;
 }
 
 vector<int> mul(const vector<int> &x, int y) {
-    if (y == 0) {
-        return {0};
-    }
-    assert(y > 0);
+    auto res = vector<int>{};
     ll tmp = 0;
-    vector<int> res;
     for (int i = 0; i < x.size(); i++) {
-        tmp += ll(x[i]) * y;
+        tmp += (ll)x[i] * y;
         res.push_back(tmp % 10);
         tmp /= 10;
     }
@@ -76,48 +85,70 @@ vector<int> mul(const vector<int> &x, int y) {
         res.push_back(tmp % 10);
         tmp /= 10;
     }
+    trim(res);
     return res;
 }
 
-pair<vector<int>, int> divmod(const vector<int> &x, int y) {
+vector<int> mul2(const vector<int> &x, const vector<int> &y) {
+    auto res = vector<int>(x.size() + y.size());
+    ll tmp = 0;
+    for (int i = 0; i < x.size(); i++) {
+        for (int j = 0; j < y.size(); j++) {
+            res[i + j] += x[i] * y[j];
+        }
+    }
+    for (int i = 0; i < res.size(); i++) {
+        tmp += res[i];
+        res[i] = tmp % 10;
+        tmp /= 10;
+    }
+    trim(res);
+    return res;
+}
+
+pair<vector<int>, int> divmod(vector<int> x, int y) {
     assert(y > 0);
+
+    auto q = vector<int>{};
     ll r = 0;
-    vector<int> q;
-    for (int i = x.size() - 1; i >= 0; i--) {
+
+    ranges::reverse(x);
+
+    for (int i = 0; i < x.size(); i++) {
         r = r * 10 + x[i];
         q.push_back(r / y);
         r %= y;
     }
-    reverse(q.begin(), q.end());
-    while (q.size() > 1 && q.back() == 0) {
-        q.pop_back();
-    }
-    return {q, r};
+
+    assert(!q.empty());
+    auto it = q.begin();
+    for (; it != prev(q.end()) && *it == 0; it++);
+
+    q.erase(q.begin(), it);
+    ranges::reverse(q);
+
+    return pair{q, r};
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    string s1 = "12345";
-    string s2 = "23456";
-    int num = 5;
+    string s1 = "123";
+    string s2 = "45";
 
     auto v1 = stov(s1);
     auto v2 = stov(s2);
 
-    // clang only!
-    // cout << format("{}", v) << endl;
+    auto v_pls = pls(v1, v2);
+    assert(vtos(v_pls) == "168");
 
-    auto sum = add(v1, v2);
-    cout << format("sum of v1 and v2 is: {}", vtos(sum)) << endl;
+    auto v_mns = mns(v1, v2);
+    assert(vtos(v_mns) == "78");
 
-    auto diff = sub(v2, v1);
-    cout << format("diff of v2 and v1 is: {}", vtos(diff)) << endl;
+    auto v_mul = mul(v1, 45);
+    assert(vtos(v_mul) == "5535");
 
-    auto prod = mul(v1, num);
-    cout << format("prod of v1 and num is: {}", vtos(prod)) << endl;
-
-    auto [q, r] = divmod(v1, num);
-    cout << format("q and r from divmod(v1, num) are: [{}, {}]", vtos(q), r) << endl;
+    auto v_mul2 = mul2(v1, v2);
+    assert(vtos(v_mul2) == "5535");
 }

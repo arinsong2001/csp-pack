@@ -3,9 +3,10 @@ ColumnLimit: 0
 SortIncludes: false
 
 AlignAfterOpenBracket: false
+AlignOperands: false
 
 AllowShortBlocksOnASingleLine: Empty
 AllowShortFunctionsOnASingleLine: Empty
 
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
