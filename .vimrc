@@ -9,7 +9,7 @@ se clipboard=unnamed,unnamedplus
 
 let g:mapleader = " "
 
-let s:rc = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 % && ./a.out; rm -f a.out)"
+let s:rc = "(trap 'rm -f a.out' INT; g++ -std=c++23 -O2 % && ./a.out; ret=$?; rm -f a.out; return $ret)"
 let s:rp = "python3 %"
 
 nn <leader>t :bel ter<CR>

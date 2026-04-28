@@ -22,7 +22,7 @@ vim.keymap.set("n", "<leader>r", function()
 
   local cmd
   if ft == "cpp" then
-    cmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 % && ./a.out; rm -f a.out)"
+    cmd = "(trap 'rm -f a.out' INT; g++ -std=c++23 -O2 % && ./a.out; ret=$?; rm -f a.out; return $ret)"
   elseif ft == "python" then
     cmd = "python3 %"
   else
@@ -47,7 +47,7 @@ if vim.g.vscode then
 
     local vcmd
     if ft == "cpp" then
-      vcmd = "(trap 'rm -f a.out' INT && g++ -std=c++23 -O2 " .. f .. " && ./a.out; rm -f a.out)"
+      vcmd = "(trap 'rm -f a.out' INT; g++ -std=c++23 -O2 " .. f .. " && ./a.out; ret=$?; rm -f a.out; return $ret)"
     elseif ft == "python" then
       vcmd = "python3 " .. f
     else
@@ -61,6 +61,7 @@ if vim.g.vscode then
       vscode.action("workbench.action.terminal.sendSequence", { args = { text = vcmd .. "\r" } })
     end, 500)
   end, { noremap = true, silent = true })
+  return
 end
 
 if vim.g.neovide then
@@ -70,15 +71,10 @@ end
 
 vim.pack.add({ "https://github.com/ellisonleao/gruvbox.nvim" })
 
-local res = {}
-res.contrast = "soft"
-if vim.g.neovide then
-  res.transparent_mode = false
-else
-  res.transparent_mode = true
-end
-
-require("gruvbox").setup(res)
+require("gruvbox").setup({
+  contrast = "soft",
+  transparent_mode = not vim.g.neovide
+})
 
 vim.cmd("colo gruvbox")
 
