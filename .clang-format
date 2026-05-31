@@ -5,8 +5,8 @@ SortIncludes: false
 AlignAfterOpenBracket: false
 AlignOperands: false
 
-AllowShortBlocksOnASingleLine: Empty
-AllowShortFunctionsOnASingleLine: Empty
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
 
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true

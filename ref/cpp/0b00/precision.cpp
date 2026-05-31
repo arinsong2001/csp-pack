@@ -66,8 +66,10 @@ vector<int> mns(const vector<int> &x, const vector<int> &y) {
         tmp = x[i] - tmp;
         if (i < y.size()) tmp -= y[i];
         res.push_back((tmp + 10) % 10);
-        if (tmp < 0) tmp = 1;
-        else tmp = 0;
+        if (tmp < 0)
+            tmp = 1;
+        else
+            tmp = 0;
     }
     trim(res);
     return res;
